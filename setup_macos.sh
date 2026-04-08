@@ -49,13 +49,17 @@ echo "✓ Ghost-text history suggestions — press → to accept"
 echo ""
 echo "── 8/10  delta (git diff viewer) ────────────────────────"
 brew install git-delta
-# Configure delta (one-time setup)
-git config --global core.pager delta
-git config --global delta.navigate true
-git config --global delta.side-by-side true
-git config --global delta.line-numbers true
-git config --global delta.syntax-theme TwoDark
-echo "✓ delta installed and configured"
+# Configure delta only if not already set (preserve user's existing pager)
+if [ "$(git config --global core.pager)" != "delta" ]; then
+  git config --global core.pager delta
+  git config --global delta.navigate true
+  git config --global delta.side-by-side true
+  git config --global delta.line-numbers true
+  git config --global delta.syntax-theme TwoDark
+  echo "✓ delta installed and configured"
+else
+  echo "✓ delta already configured"
+fi
 
 echo ""
 echo "── 9/10  tree (static file tree) ────────────────────────"
@@ -219,7 +223,7 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
   source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ─────────────────────────────────────────────────────────────
-#  Starship prompt — must be LAST (after all plugins)
+#  Starship prompt
 # ─────────────────────────────────────────────────────────────
 if command -v starship &>/dev/null; then
   eval "$(starship init zsh)"
@@ -227,8 +231,11 @@ fi
 EOF
 echo "✓ Shell config written to $SETUP_ZSH"
 
-# Back up existing .zshrc if present
-[ -f ~/.zshrc ] && cp ~/.zshrc ~/.zshrc.bak && echo "  (backed up existing .zshrc to .zshrc.bak)"
+# Back up existing .zshrc if present (only on first run — don't overwrite previous backup)
+if [ -f ~/.zshrc ] && [ ! -f ~/.zshrc.bak ]; then
+  cp ~/.zshrc ~/.zshrc.bak
+  echo "  (backed up existing .zshrc to .zshrc.bak)"
+fi
 
 # Add source line to ~/.zshrc only if not already present (idempotent)
 SOURCE_LINE="[ -f \"\$HOME/.config/zsh/setup.zsh\" ] && source \"\$HOME/.config/zsh/setup.zsh\""

@@ -21,7 +21,7 @@ fi
 echo ""
 echo "── 2/8  Git + curl + build tools ──────────────────────"
 sudo apt install -y git curl wget unzip fontconfig
-echo "✓ Done"
+echo "✓ Build tools ready"
 
 echo ""
 echo "── 3/8  Starship (prompt) ──────────────────────────────"
@@ -54,11 +54,15 @@ fi
 
 echo ""
 echo "── 5/8  bat (modern cat) ───────────────────────────────"
-sudo apt install -y bat
-# Ubuntu installs it as 'batcat' to avoid conflict
+if command -v batcat &>/dev/null || command -v bat &>/dev/null; then
+  echo "✓ Already installed"
+else
+  sudo apt install -y bat
+  echo "✓ bat installed"
+fi
+# Ubuntu installs it as 'batcat' to avoid conflict — ensure 'bat' symlink exists
 mkdir -p ~/.local/bin
 ln -sf /usr/bin/batcat ~/.local/bin/bat
-echo "✓ bat installed (symlinked as 'bat')"
 
 echo ""
 echo "── 6/8  fzf (fuzzy finder) ─────────────────────────────"
@@ -73,13 +77,21 @@ fi
 
 echo ""
 echo "── 7/8  zsh plugins ────────────────────────────────────"
-sudo apt install -y zsh-autosuggestions zsh-syntax-highlighting
-echo "✓ Plugins installed"
+if dpkg -s zsh-autosuggestions zsh-syntax-highlighting &>/dev/null; then
+  echo "✓ Already installed"
+else
+  sudo apt install -y zsh-autosuggestions zsh-syntax-highlighting
+  echo "✓ Plugins installed"
+fi
 
 echo ""
 echo "── 8/8  tree + broot ───────────────────────────────────"
-sudo apt install -y tree
-echo "✓ tree installed"
+if command -v tree &>/dev/null; then
+  echo "✓ tree already installed"
+else
+  sudo apt install -y tree
+  echo "✓ tree installed"
+fi
 # broot — skip if a valid ELF binary is already installed
 BROOT_BIN=$(command -v broot 2>/dev/null || true)
 if [ -n "$BROOT_BIN" ] && file "$BROOT_BIN" 2>/dev/null | grep -q 'ELF.*executable'; then
@@ -284,10 +296,10 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 # export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 # export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
 # export ROS_DOMAIN_ID=1
-# export CYCLONEDDS_URI=/home/fanyang1/cyclonedds_ros2.xml
+# export CYCLONEDDS_URI="$HOME/cyclonedds_ros2.xml"
 
 # ─────────────────────────────────────────────────────────────
-#  Starship prompt (must be last)
+#  Starship prompt
 # ─────────────────────────────────────────────────────────────
 if command -v starship &>/dev/null; then
   eval "$(starship init zsh)"

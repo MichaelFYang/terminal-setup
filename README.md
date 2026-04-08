@@ -21,7 +21,7 @@ Starting from a fresh install, these scripts transform the default terminal into
 | 5 | [bat](https://github.com/sharkdp/bat) | Modern `cat` — syntax highlighting, line numbers | apt | brew |
 | 6 | [fzf](https://github.com/junegunn/fzf) | Fuzzy finder for history (`Ctrl+R`) and files (`Ctrl+T`) | apt | brew |
 | 7 | [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) / [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) | Ghost-text suggestions and live syntax coloring | apt | brew |
-| 8 | [delta](https://github.com/dandavid/delta) | Beautiful side-by-side git diffs | — | brew |
+| 8 | [delta](https://github.com/dandavison/delta) | Beautiful side-by-side git diffs | — | brew |
 | 9 | [broot](https://github.com/Canop/broot) + tree | Interactive and classic directory viewers | binary | brew |
 | — | [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts) | Patched font for terminal icon support | curl | brew cask |
 
