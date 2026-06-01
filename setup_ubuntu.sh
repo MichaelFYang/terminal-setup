@@ -28,7 +28,11 @@ echo "── 3/8  Starship (prompt) ──────────────�
 if command -v starship &>/dev/null; then
   echo "✓ Already installed ($(starship --version 2>&1 | head -1))"
 else
-  curl -sS https://starship.rs/install.sh | sh -s -- --yes
+  # Install to ~/.local/bin (already on PATH) so the upstream installer does
+  # not escalate to root for /usr/local/bin -- the root-context download was
+  # failing (sudo strips proxy env vars; curl --fail then sees an HTTP error).
+  mkdir -p ~/.local/bin
+  curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$HOME/.local/bin"
   echo "✓ Starship installed"
 fi
 
